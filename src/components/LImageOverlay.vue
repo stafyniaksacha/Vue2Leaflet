@@ -1,6 +1,5 @@
 <script>
 import propsBinder from '../utils/propsBinder.js';
-import findRealParent from '../utils/findRealParent.js';
 
 const props = {
   url: {
@@ -34,6 +33,7 @@ const props = {
 export default {
   name: 'LImageOverlay',
   props: props,
+  inject: ['addLayer', 'removeLayer'],
   mounted () {
     let options = {
       opacity: this.opacity,
@@ -44,20 +44,19 @@ export default {
     this.mapObject = L.imageOverlay(this.url, this.bounds, options);
     L.DomEvent.on(this.mapObject, this.$listeners);
     propsBinder(this, this.mapObject, props);
-    this.parentContainer = findRealParent(this.$parent);
-    this.parentContainer.addLayer(this, !this.visible);
+    this.addLayer(this, !this.visible);
   },
   beforeDestroy () {
-    this.parentContainer.removeLayer(this);
+    this.removeLayer(this);
   },
   methods: {
     setVisible (newVal, oldVal) {
       if (newVal === oldVal) return;
       if (this.mapObject) {
         if (newVal) {
-          this.parentContainer.addLayer(this);
+          this.addLayer(this);
         } else {
-          this.parentContainer.removeLayer(this);
+          this.removeLayer(this);
         }
       }
     },

@@ -5,7 +5,6 @@
 <script>
 import L from 'leaflet';
 import propsBinder from '../utils/propsBinder.js';
-import findRealParent from '../utils/findRealParent.js';
 
 const props = {
   url: String,
@@ -63,6 +62,7 @@ const props = {
 export default {
   name: 'LTileLayer',
   props: props,
+  inject: ['rootMapObject', 'addLayer', 'removeLayer'],
   mounted () {
     const options = this.options;
     const otherPropertytoInitialize = [ 'attribution', 'token', 'detectRetina', 'opacity', 'zIndex' ];
@@ -75,15 +75,14 @@ export default {
     this.mapObject = this.tileLayerClass(this.url, options);
     L.DomEvent.on(this.mapObject, this.$listeners);
     propsBinder(this, this.mapObject, props);
-    this.parentContainer = findRealParent(this.$parent);
-    this.parentContainer.addLayer(this, !this.visible);
+    this.addLayer(this, !this.visible);
   },
   beforeDestroy () {
-    this.parentContainer.removeLayer(this);
+    this.removeLayer(this);
   },
   methods: {
     setAttribution (val, old) {
-      let attributionControl = this.$parent.mapObject.attributionControl;
+      let attributionControl = this.rootMapObject.attributionControl;
       attributionControl.removeAttribution(old).addAttribution(val);
     },
     setToken (val) {
@@ -93,9 +92,9 @@ export default {
       if (newVal === oldVal) return;
       if (this.mapObject) {
         if (newVal) {
-          this.parentContainer.addLayer(this);
+          this.addLayer(this);
         } else {
-          this.parentContainer.removeLayer(this);
+          this.removeLayer(this);
         }
       }
     }

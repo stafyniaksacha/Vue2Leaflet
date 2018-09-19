@@ -1,6 +1,5 @@
 <script>
 import propsBinder from '../utils/propsBinder.js';
-import findRealParent from '../utils/findRealParent.js';
 
 const props = {
   baseUrl: String,
@@ -63,6 +62,7 @@ const props = {
 export default {
   name: 'LWMSTileLayer',
   props: props,
+  inject: ['addLayer', 'removeLayer'],
   mounted () {
     const options = this.options;
     const otherPropertytoInitialize = [ 'layers', 'styles', 'format', 'transparent', 'version', 'crs', 'upperCase', 'zIndex', 'opacity' ];
@@ -75,20 +75,19 @@ export default {
     this.mapObject = L.tileLayer.wms(this.baseUrl, options);
     L.DomEvent.on(this.mapObject, this.$listeners);
     propsBinder(this, this.mapObject, props);
-    this.parentContainer = findRealParent(this.$parent);
-    this.parentContainer.addLayer(this, !this.visible);
+    this.addLayer(this, !this.visible);
   },
   beforeDestroy () {
-    this.parentContainer.removeLayer(this);
+    this.removeLayer(this);
   },
   methods: {
     setVisible (newVal, oldVal) {
       if (newVal === oldVal) return;
       if (this.mapObject) {
         if (newVal) {
-          this.parentContainer.addLayer(this);
+          this.addLayer(this);
         } else {
-          this.parentContainer.removeLayer(this);
+          this.removeLayer(this);
         }
       }
     }

@@ -67,10 +67,19 @@ const props = {
 export default {
   name: 'LMap',
   props: props,
+  provide () {
+    return {
+      rootMapObject: this.mapObject,
+      registerLayerControl: this.registerLayerControl,
+      addLayer: this.addLayer,
+      removeLayer: this.removeLayer
+    };
+  },
   data () {
     return {
       ready: false,
       movingRequest: 0,
+      mapObject: undefined,
       lastSetCenter: undefined,
       lastSetBounds: undefined,
       layerControl: undefined,

@@ -6,7 +6,6 @@
 
 <script>
 import propsBinder from '../utils/propsBinder.js';
-import findRealParent from '../utils/findRealParent.js';
 
 const props = {
   draggable: {
@@ -40,6 +39,7 @@ const props = {
 export default {
   name: 'LMarker',
   props: props,
+  inject: ['addLayer', 'removeLayer'],
   data () {
     return {
       ready: false
@@ -55,11 +55,10 @@ export default {
     L.DomEvent.on(this.mapObject, this.$listeners);
     propsBinder(this, this.mapObject, props);
     this.ready = true;
-    this.parentContainer = findRealParent(this.$parent);
-    this.parentContainer.addLayer(this, !this.visible);
+    this.addLayer(this, !this.visible);
   },
   beforeDestroy () {
-    this.parentContainer.removeLayer(this);
+    this.removeLayer(this);
   },
   methods: {
     setDraggable (newVal, oldVal) {
@@ -71,9 +70,9 @@ export default {
       if (newVal === oldVal) return;
       if (this.mapObject) {
         if (newVal) {
-          this.parentContainer.addLayer(this);
+          this.addLayer(this);
         } else {
-          this.parentContainer.removeLayer(this);
+          this.removeLayer(this);
         }
       }
     },

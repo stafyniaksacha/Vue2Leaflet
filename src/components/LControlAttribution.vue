@@ -19,6 +19,7 @@ const props = {
 export default {
   name: 'LControlAttribution',
   props: props,
+  inject: ['rootMapObject'],
   mounted () {
     const options = this.options;
     const otherPropertytoInitialize = [ 'prefix', 'position' ];
@@ -30,7 +31,7 @@ export default {
     }
     this.mapObject = L.control.attribution(options);
     propsBinder(this, this.mapObject, props);
-    this.mapObject.addTo(this.$parent.mapObject);
+    this.mapObject.addTo(this.rootMapObject);
   },
   beforeDestroy () {
     this.mapObject.remove();

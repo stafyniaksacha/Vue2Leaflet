@@ -6,7 +6,6 @@
 
 <script>
 import propsBinder from '../utils/propsBinder.js';
-import findRealParent from '../utils/findRealParent.js';
 
 const props = {
   visible: {
@@ -19,6 +18,7 @@ const props = {
 export default {
   name: 'LFeatureGroup',
   props: props,
+  inject: ['addLayer', 'removeLayer'],
   data () {
     return {
       ready: false
@@ -29,33 +29,32 @@ export default {
     propsBinder(this, this.mapObject, props);
     L.DomEvent.on(this.mapObject, this.$listeners);
     this.ready = true;
-    this.parentContainer = findRealParent(this.$parent, true);
     if (this.visible) {
-      this.parentContainer.addLayer(this);
+      this.addLayer(this);
     }
   },
   beforeDestroy () {
-    this.parentContainer.removeLayer(this);
+    this.removeLayer(this);
   },
   methods: {
     addLayer (layer, alreadyAdded) {
       if (!alreadyAdded) {
         this.mapObject.addLayer(layer.mapObject);
       }
-      this.parentContainer.addLayer(layer, true);
+      this.addLayer(layer, true);
     },
     removeLayer (layer, alreadyRemoved) {
       if (!alreadyRemoved) {
         this.mapObject.removeLayer(layer.mapObject);
       }
-      this.parentContainer.removeLayer(layer, true);
+      this.removeLayer(layer, true);
     },
     setVisible (newVal, oldVal) {
       if (newVal === oldVal) return;
       if (newVal) {
-        this.parentContainer.addLayer(this);
+        this.addLayer(this);
       } else {
-        this.parentContainer.removeLayer(this);
+        this.removeLayer(this);
       }
     }
   }

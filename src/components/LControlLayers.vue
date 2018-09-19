@@ -35,6 +35,7 @@ const props = {
 export default {
   name: 'LControlLayers',
   props: props,
+  inject: ['registerLayerControl'],
   mounted () {
     const options = this.options;
     const otherPropertytoInitialize = [ 'collapsed', 'autoZIndex', 'hideSingleBase', 'sortLayers', 'sortFunction' ];
@@ -46,7 +47,7 @@ export default {
     }
     this.mapObject = L.control.layers(null, null, options);
     propsBinder(this, this.mapObject, props);
-    this.$parent.registerLayerControl(this);
+    this.registerLayerControl(this);
   },
   beforeDestroy () {
     this.mapObject.remove();
