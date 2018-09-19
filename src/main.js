@@ -34,5 +34,4 @@ for (let component in components) {
   exports[component] = components[component];
 }
 
-exports.findRealParent = require('./utils/findRealParent').default;
 exports.propsBinder = require('./utils/propsBinder').default;
