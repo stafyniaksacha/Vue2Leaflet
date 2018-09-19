@@ -77,6 +77,9 @@ export default {
       layersToAdd: []
     };
   },
+  updated () {
+    this.$nextTick(() => window.dispatchEvent(new Event('resize')));
+  },
   mounted () {
     const options = this.options;
     Object.assign(options, {
