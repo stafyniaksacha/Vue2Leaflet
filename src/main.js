@@ -28,7 +28,7 @@ Vue2Leaflet.install = function (Vue) {
   }
 };
 
-exports.default = Vue2Leaflet;
+exports.Vue2Leaflet = Vue2Leaflet;
 
 for (let component in components) {
   exports[component] = components[component];
