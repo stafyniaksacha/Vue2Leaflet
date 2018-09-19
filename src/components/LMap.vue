@@ -99,6 +99,7 @@ export default {
     propsBinder(this, this.mapObject, props);
     this.ready = true;
     this.$emit('load');
+    this.$nextTick(() => window.dispatchEvent(new Event('resize')));
   },
   methods: {
     registerLayerControl (lControlLayers) {
@@ -136,6 +137,7 @@ export default {
     setZoom (newVal, oldVal) {
       this.movingRequest += 1;
       this.mapObject.setZoom(newVal);
+        this.$nextTick(() => window.dispatchEvent(new Event('resize')));
     },
     setCenter (newVal, oldVal) {
       if (newVal == null) {
@@ -158,6 +160,7 @@ export default {
         this.lastSetCenter = center;
         this.movingRequest += 1;
         this.mapObject.panTo(newVal);
+        this.$nextTick(() => window.dispatchEvent(new Event('resize')));
       }
     },
     setBounds (newVal, oldVal) {
@@ -249,6 +252,8 @@ export default {
         }
         this.movingRequest += 1;
         this.mapObject.fitBounds(newVal, options);
+
+        this.$nextTick(() => window.dispatchEvent(new Event('resize')));
       }
     },
     setPaddingBottomRight (newVal, oldVal) {
