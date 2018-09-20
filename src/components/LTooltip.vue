@@ -31,7 +31,7 @@ export default {
     propsBinder(this, this.mapObject, props);
     this.mapObject.setContent(this.content || this.$el);
     this.parentContainer = findRealParent(this.$parent);
-    this.parentContainer.mapObject.bindTooltip(this.mapObject);
+    this.$nextTick(() => this.parentContainer.mapObject.bindTooltip(this.mapObject));
   },
   beforeDestroy () {
     if (this.parentContainer.mapObject.getTooltip()) {

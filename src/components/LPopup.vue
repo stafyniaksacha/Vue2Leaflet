@@ -39,7 +39,7 @@ export default {
     propsBinder(this, this.mapObject, props);
     this.ready = true;
     this.parentContainer = findRealParent(this.$parent);
-    this.parentContainer.mapObject.bindPopup(this.mapObject);
+    this.$nextTick(() => this.parentContainer.mapObject.bindPopup(this.mapObject));
   },
   beforeDestroy () {
     if (this.parentContainer.mapObject && this.parentContainer.mapObject.getPopup()) {
